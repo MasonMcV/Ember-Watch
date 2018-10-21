@@ -9,8 +9,10 @@ firebase_admin.initialize_app(cred, {
 })
 db = firebase_admin.firestore.client()
 emberWatch = db.collection(u'Ember-Watch')
-
 bucket = storage.bucket()
+blob = bucket.get_blob(u'wildfire-widescreen-a-1.jpg')
+
+blob.download_to_filename(u'pic.jpeg')
 
 data = {
    
@@ -19,7 +21,7 @@ data = {
 #gets list of documents in collection
 docs = emberWatch.get()
 
-#for doc in docs:
-   # print(u'{} => {}'.format(doc.id, doc.to_dict()))
+for doc in docs:
+    print(u'{} => {}'.format(doc.id, doc.to_dict()))
 
-print(bucket.exists())
+print()
