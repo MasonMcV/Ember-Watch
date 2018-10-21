@@ -14,14 +14,12 @@ blob = bucket.get_blob(u'wildfire-widescreen-a-1.jpg')
 
 blob.download_to_filename(u'pic.jpeg')
 
-data = {
-   
-}
-
 #gets list of documents in collection
 docs = emberWatch.get()
 
 for doc in docs:
     print(u'{} => {}'.format(doc.id, doc.to_dict()))
-
-print()
+    long = doc.get(u'long')
+    lat = doc.get(u'lat')
+    print(long)
+    print(lat)
