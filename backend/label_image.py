@@ -105,8 +105,8 @@ def main(file):
 
   input_name = "import/" + input_layer
   output_name = "import/" + output_layer
-  input_operation = graph.get_operation_by_name(input_name);
-  output_operation = graph.get_operation_by_name(output_name);
+  input_operation = graph.get_operation_by_name(input_name)
+  output_operation = graph.get_operation_by_name(output_name)
 
   with tf.Session(graph=graph) as sess:
     start = time.time()
@@ -118,7 +118,5 @@ def main(file):
   top_k = results.argsort()[-5:][::-1]
   labels = load_labels(label_file)
 
-  print('\nEvaluation time (1-image): {:.3f}s\n'.format(end-start))
   template = "{} (score={:0.5f})"
-  for i in top_k:
-    print(template.format(labels[i], results[i]))
+  return top_k[0] == 0

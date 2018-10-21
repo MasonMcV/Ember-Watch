@@ -2,6 +2,7 @@ import boto3
 import urllib
 from urllib import request
 import label_image
+import logFirebase
 
 def RollTide(submissionID):
     session = boto3.session.Session(
@@ -24,4 +25,11 @@ def RollTide(submissionID):
 
     URL = item['Item']['imgURL']
     img_data = urllib.request.urlopen(URL).read()
-    label_image.main(img_data)
+    if(label_image.main(img_data)):
+        logFirebase.logToFirebase(item['Item'])
+
+    table.delete_item(
+        Key={
+            'SubmissionID' : submissionID
+        }
+    )
