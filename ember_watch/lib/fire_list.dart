@@ -38,17 +38,13 @@ class FireList extends StatelessWidget {
     return new Card(
         child: new Stack(
           children: <Widget>[
+            new Container(
+              color: Colors.black,
+            ),
             new Center(
               child: new Image.network(imageString,),
+
             ),
-            /*new Container(
-              child: new Icon(
-                Icons.add_location,
-                size: 40.0,
-                color: Colors.red,
-              ),
-              alignment: Alignment(0.0, 0.0),
-            ),*/
           ],
           alignment: Alignment(0.0, 0.0),
         )
@@ -61,7 +57,7 @@ class FireList extends StatelessWidget {
 
     if(snapshotList != null &&  snapshotList.isNotEmpty) {
       for (var snapshotDocument in snapshotList) {
-        expansionList.add(imageCard(snapshotDocument.data["image"]));
+        expansionList.add(imageCard((snapshotDocument.data["image"] != null)?snapshotDocument.data["image"]:snapshotDocument.data["imgURL"]));
         debugPrint(snapshotDocument.data["Image"].toString());
         /*expansionList.add(new ExpansionTile(title: new Text(snapshotDocument.documentID),
           children: tileWidgetList(snapshotDocument.data["items"]),
@@ -75,6 +71,7 @@ class FireList extends StatelessWidget {
     for(Map map in list) {
       expansionList.add(new ListTile(
         title: new Text(map["name"]),
+
         //isThreeLine: true,
         subtitle: map.containsKey("description") ? new Text(map["description"]) : null,
         trailing: map.containsKey("price") ? new Text('\$'+map["price"].toString()) : " ",

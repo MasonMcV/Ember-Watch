@@ -70,7 +70,9 @@ class _CameraExampleHomeState extends State<CameraExampleHome> {
               ),
             ),
             new ListTile(
-                title: new Text('Settings'),
+                title: new Text('View Data', style: new TextStyle(fontSize: 30.0),),
+                isThreeLine: true,
+                subtitle: new Text(" "),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(
@@ -80,7 +82,9 @@ class _CameraExampleHomeState extends State<CameraExampleHome> {
                   //update state of app
                 }),
             new ListTile(
-                title: new Text('License'),
+                title: new Text('License', style: new TextStyle(fontSize: 30.0),),
+                isThreeLine: true,
+                subtitle: new Text(" "),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(
