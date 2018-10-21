@@ -11,9 +11,13 @@ import 'package:location/location.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/services.dart';
 import 'license.dart';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'fire_list.dart';
 
 class CameraExampleHome extends StatefulWidget {
+  CameraExampleHome(this.firestore);
+  Firestore firestore;
   @override
   _CameraExampleHomeState createState() {
     return _CameraExampleHomeState();
@@ -53,33 +57,41 @@ class _CameraExampleHomeState extends State<CameraExampleHome> {
       appBar: AppBar(
         title: const Text('Ember Watch'),
       ),
-        drawer: new Drawer(
-          child: new ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              new DrawerHeader(
-                child: null,
-                decoration: new BoxDecoration( //color: Colors.red),
-                  image: DecorationImage(
-                      image: new AssetImage('assets/Icon.png')),
-                ),
+      drawer: new Drawer(
+        child: new ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            new DrawerHeader(
+              child: null,
+              decoration: new BoxDecoration(
+                //color: Colors.red),
+                image:
+                    DecorationImage(image: new AssetImage('assets/Icon.png')),
               ),
-              new ListTile(
-                  title: new Text('Settings'),
-                  onTap: () {
-                    //update state of app
-                  }),
-              new ListTile(
-                  title: new Text('License'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(context, new MaterialPageRoute(
-                        builder: (context) => new LicensePg()));
-                  }),
-            ],
-          ),
+            ),
+            new ListTile(
+                title: new Text('Settings'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new FireList(firestore: widget.firestore,)));
+                  //update state of app
+                }),
+            new ListTile(
+                title: new Text('License'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new LicensePg()));
+                }),
+          ],
         ),
-      body: Column(
+      ),
+      body: new Column(
         children: <Widget>[
           Expanded(
             child: Container(
@@ -116,7 +128,7 @@ class _CameraExampleHomeState extends State<CameraExampleHome> {
     );
   }
 
-  Future<Map<String, double>> getLocation() async{
+  Future<Map<String, double>> getLocation() async {
     var currentLocation = <String, double>{};
 
     var location = new Location();
@@ -151,22 +163,22 @@ class _CameraExampleHomeState extends State<CameraExampleHome> {
         child: videoController == null && imagePath == null
             ? null
             : SizedBox(
-          child: (videoController == null)
-              ? Image.file(File(imagePath))
-              : Container(
-            child: Center(
-              child: AspectRatio(
-                  aspectRatio: videoController.value.size != null
-                      ? videoController.value.aspectRatio
-                      : 1.0,
-                  child: VideoPlayer(videoController)),
-            ),
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.pink)),
-          ),
-          width: 64.0,
-          height: 64.0,
-        ),
+                child: (videoController == null)
+                    ? Image.file(File(imagePath))
+                    : Container(
+                        child: Center(
+                          child: AspectRatio(
+                              aspectRatio: videoController.value.size != null
+                                  ? videoController.value.aspectRatio
+                                  : 1.0,
+                              child: VideoPlayer(videoController)),
+                        ),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.pink)),
+                      ),
+                width: 64.0,
+                height: 64.0,
+              ),
       ),
     );
   }
@@ -181,8 +193,8 @@ class _CameraExampleHomeState extends State<CameraExampleHome> {
           icon: const Icon(Icons.camera_alt),
           color: Colors.blue,
           onPressed: controller != null &&
-              controller.value.isInitialized &&
-              !controller.value.isRecordingVideo
+                  controller.value.isInitialized &&
+                  !controller.value.isRecordingVideo
               ? onTakePictureButtonPressed
               : null,
         ),
@@ -215,7 +227,6 @@ class _CameraExampleHomeState extends State<CameraExampleHome> {
     if (cameras.isEmpty) {
       return const Text('No camera found');
     } else {
-
       //onNewCameraSelected(cameras[0]);
       for (CameraDescription cameraDescription in cameras) {
         toggles.add(
@@ -223,7 +234,7 @@ class _CameraExampleHomeState extends State<CameraExampleHome> {
             width: 90.0,
             child: RadioListTile<CameraDescription>(
               title: Icon(getCameraLensIcon(cameraDescription.lensDirection)),
-              selected: (cameraDescription == cameras[0])? true: false,
+              selected: (cameraDescription == cameras[0]) ? true : false,
               groupValue: controller?.description,
               value: cameraDescription,
               onChanged: controller != null && controller.value.isRecordingVideo
@@ -285,12 +296,11 @@ class _CameraExampleHomeState extends State<CameraExampleHome> {
           //testDio();
         }
       }
-    }).then((dynamic IDKWhy){
+    }).then((dynamic IDKWhy) {
       locationData = getLocation();
-    }).then((dynamic IDKWhy){
-      testDio(locationData,awsKeys);
+    }).then((dynamic IDKWhy) {
+      testDio(locationData, awsKeys);
     });
-
   }
 
   /*Future<List<String>> readFile() async {
@@ -311,19 +321,21 @@ class _CameraExampleHomeState extends State<CameraExampleHome> {
   void testDio(var locationDataMap, var awsKeys) async {
     Dio dio = new Dio();
 
+    String awsSecretKey = "2KPh0X08rwdtVQMC1OOnKw21AUeHhvzhXSVu/D+s";
     String awsKey = "AKIAJPUHR4QFCAJAHU5A";
 
-    var  canonicalizedResource = "/ember-watch";
+    var canonicalizedResource = "/ember-watch";
 
     /*var string = "POST" + "\n" + "\n" +
         "image/jpeg" + "\n" +
-        *//*DateTime.now().toString() + *//*"\n" +
+        */ /*DateTime.now().toString() + */ /*"\n" +
         canonicalizedResource;*/
 
     var base64 = Base64Codec.urlSafe();
     var secretAccessKey = utf8.encode(awsKey);
     var stringToSign = utf8.encode("test");
-    String signature = base64.encode(Hmac(sha1, secretAccessKey).convert(stringToSign).bytes);
+    String signature =
+        base64.encode(Hmac(sha1, secretAccessKey).convert(stringToSign).bytes);
     /*FormData formdata = new FormData();
     File file = new File(imagePath);
     formdata.add("photos", new UploadFileInfo(file, imagePath));
@@ -348,14 +360,16 @@ class _CameraExampleHomeState extends State<CameraExampleHome> {
     try {
       debugPrint("THIS");
       //response = await
-      dio.post(
+      dio
+          .post(
         "https://ember-watch.s3.amazonaws.com/",
         options: new Options(
-          //method: "POST",
-          //headers: {"Authorization": "AWS" + " " + awsKey + ":" + signature},
-        ),
+            //method: "POST",
+            //headers: {"Authorization": "AWS" + " " + awsKey + ":" + signature},
+            ),
         data: formData,
-      ).then((var test){
+      )
+          .then((var test) {
         response = test;
         debugPrint("Printed, so this ran");
         debugPrint(response.data);
@@ -476,10 +490,14 @@ class _CameraExampleHomeState extends State<CameraExampleHome> {
 }
 
 class CameraApp extends StatelessWidget {
+  CameraApp(this.firestore);
+
+  Firestore firestore;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: CameraExampleHome(),
+      home: CameraExampleHome(firestore),
       theme: new ThemeData(
         primarySwatch: Colors.red,
       ),
@@ -491,10 +509,21 @@ List<CameraDescription> cameras;
 
 Future<Null> main() async {
   // Fetch the available cameras before initializing the app.
+  final FirebaseApp app = await FirebaseApp.configure(
+    name: 'test',
+    options: const FirebaseOptions(
+      googleAppID: '1:107553084724:android:f5a141036d59379a',
+      gcmSenderID: '107553084724',
+      apiKey: 'AIzaSyDP7SobuX5USQHv0TCKZtuuGd8S7pHd4zQ',
+      projectID: 'ember-watch-cb6ea',
+    ),
+  );
+  final Firestore firestore = new Firestore(app: app);
+
   try {
     cameras = await availableCameras();
   } on CameraException catch (e) {
     logError(e.code, e.description);
   }
-  runApp(CameraApp());
+  runApp(CameraApp(firestore));
 }

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "107553084724",
+    "firebase_url": "https://ember-watch-cb6ea.firebaseio.com",
+    "project_id": "ember-watch-cb6ea",
+    "storage_bucket": "ember-watch-cb6ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:107553084724:android:f5a141036d59379a",
+        "android_client_info": {
+          "package_name": "com.msquaredtech.emberwatch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "107553084724-dru3eprek5istqc2rl3brq4vs8fc2fg6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDP7SobuX5USQHv0TCKZtuuGd8S7pHd4zQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
