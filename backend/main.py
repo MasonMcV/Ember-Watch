@@ -5,7 +5,8 @@ import label_image
 import logFirebase
 import filter
 
-def RollTide(submissionID):
+def RollTide(event, context):
+    submissionID = event['SubmissionID']
     session = boto3.session.Session(
         region_name='us-east-2',
         aws_access_key_id='AKIAJPUHR4QFCAJAHU5A',
