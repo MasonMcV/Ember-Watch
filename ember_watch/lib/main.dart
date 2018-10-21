@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:location/location.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/services.dart';
+import 'license.dart';
 
 
 class CameraExampleHome extends StatefulWidget {
@@ -52,6 +53,32 @@ class _CameraExampleHomeState extends State<CameraExampleHome> {
       appBar: AppBar(
         title: const Text('Ember Watch'),
       ),
+        drawer: new Drawer(
+          child: new ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              new DrawerHeader(
+                child: null,
+                decoration: new BoxDecoration( //color: Colors.red),
+                  image: DecorationImage(
+                      image: new AssetImage('assets/Icon.png')),
+                ),
+              ),
+              new ListTile(
+                  title: new Text('Settings'),
+                  onTap: () {
+                    //update state of app
+                  }),
+              new ListTile(
+                  title: new Text('License'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context, new MaterialPageRoute(
+                        builder: (context) => new LicensePg()));
+                  }),
+            ],
+          ),
+        ),
       body: Column(
         children: <Widget>[
           Expanded(
@@ -284,7 +311,6 @@ class _CameraExampleHomeState extends State<CameraExampleHome> {
   void testDio(var locationDataMap, var awsKeys) async {
     Dio dio = new Dio();
 
-    String awsSecretKey = "2KPh0X08rwdtVQMC1OOnKw21AUeHhvzhXSVu/D+s";
     String awsKey = "AKIAJPUHR4QFCAJAHU5A";
 
     var  canonicalizedResource = "/ember-watch";

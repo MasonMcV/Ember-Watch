@@ -20,6 +20,7 @@ dependencies:
   video_player: ^0.5.2
   dio:
   location: ^1.4.1
+  flutter_launcher_icons: "^0.6.1"
 
 
 dev_dependencies:
@@ -34,6 +35,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/keys.key
+    - assets/Icon.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -70,3 +72,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/Icon.png"
