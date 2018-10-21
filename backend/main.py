@@ -3,6 +3,7 @@ import urllib
 from urllib import request
 import label_image
 import logFirebase
+import filter
 
 def RollTide(submissionID):
     session = boto3.session.Session(
@@ -24,8 +25,10 @@ def RollTide(submissionID):
     )
 
     URL = item['Item']['imgURL']
+    lon = float(item['Item']['long'])
+    lat = float(item['Item']['lat'])
     img_data = urllib.request.urlopen(URL).read()
-    if(label_image.main(img_data)):
+    if(label_image.main(img_data) & filter.filterData(lon, lat)):
         logFirebase.logToFirebase(item['Item'])
 
     table.delete_item(
